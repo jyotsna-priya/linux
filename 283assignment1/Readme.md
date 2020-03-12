@@ -37,7 +37,11 @@
 
     `cd 283assignment1`
 11. Copy the starter code files cmpe283-1.c and Makefile to this directory
-12. Make required changes in cmpe283-1.c file to include all the assignment functionality. (Referred to the Intel SDM for the list of MSRs)
+12. Make required changes in cmpe283-1.c file to include all the assignment functionality. (Referred to the Intel SDM for the list of MSRs) and run make command:
+
+    `make`
+
+    This will create some more files in the current directory which includes cmpe283-1.ko which will be used to load the new module into the kernel.
 
 ### Load (insert) the new module
 13. Load the module into the kernel using the following command (use sudo or login as root):
