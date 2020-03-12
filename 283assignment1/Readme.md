@@ -12,7 +12,7 @@
 4. Install git
 
 ### Download and build the Linux kernel source code
-5. Fork the repository where the Kernel code is available and git clone the code from own repository
+5. Fork https://github.com/torvalds/linux repository where the Kernel code is available and git clone the code from own repository
 6. Go to the downloaded directory and install the necessary packages:
     
     `cd linux`
@@ -27,12 +27,14 @@
 9. Run the following command to build the kernel modules.
 
     `make -j <number of parallel processes>`
+    
     Here, the number of parallel processes to run should be the number of cores assigned to the VM while creating it. In my case it was 2. The process took around 1.5 hours.
 
 ### Create a new kernel module with the assignment functionality
 10. Create a new directory in the kernel code. Inside linux/ directory:
 
     `mkdir 283assignment1`
+
     `cd 283assignment1`
 11. Copy the starter code files cmpe283-1.c and Makefile to this directory
 12. Make required changes in cmpe283-1.c file to include all the assignment functionality. (Referred to the Intel SDM for the list of MSRs)
@@ -41,17 +43,20 @@
 13. Load the module into the kernel using the following command (use sudo or login as root):
 
     `sudo insmod ./cmpe283-1.ko`
+
     Above command calls the init_module() function of this new module which will call the detect_vmx_features() function
 14. We can stop the module using command:
 
     `sudo rmmod ./cmpe283-1.ko`
+
     The above command calls the cleanup_module() function of the module
 
 ### Verify proper output in the system message log
 15. Run command to see kernel buffer/ log:
+
     `dmesg`
 
-16. The output seems something like this:
+16. The output looks something like this:
     ![Output1](1.png)
     ![Output2](2.png)
     ![Output3](3.png)
