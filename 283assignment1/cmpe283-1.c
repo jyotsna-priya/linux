@@ -206,7 +206,7 @@ detect_vmx_features(void)
 	 */
 	rdmsr(IA32_VMX_PROCBASED_CTLS, lo, hi);
 	/* Secondary Procbased controls */
-	if ( hi & (1 << (63 - 32)))
+	if ( hi && (1 << 31))
 	{
 		rdmsr(IA32_VMX_PROCBASED_CTLS2, lo, hi);
 		pr_info("\nSecondary procbased Controls MSR: 0x%llx\n",
