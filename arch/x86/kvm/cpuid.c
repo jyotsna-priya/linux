@@ -1055,7 +1055,7 @@ bool kvm_cpuid(struct kvm_vcpu *vcpu, u32 *eax, u32 *ebx,
 EXPORT_SYMBOL_GPL(kvm_cpuid);
 
 /* changes for assignment 2 and 3 */
-uint32_t num_exits_all;
+uint32_t num_exits_all=0;
 EXPORT_SYMBOL(num_exits_all);
 
 uint32_t num_exits_single[2][69] = {
@@ -1091,11 +1091,11 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 	else if(eax==0x4FFFFFFD){
 		if(ecx <69){  
 			basic_exit_reason = ecx;
-			eax = num_exits_single[1][ecx];
+			eax = num_exits_single[1][basic_exit_reason];
 			ebx = 0x00000000;
 			ecx = 0x00000000;
 			edx = 0x00000000;
-			printk("eax leaf is 0x4ffffffe, total number of exits for %u are: %u", basic_exit_reason, eax);
+			printk("eax leaf is 0x4ffffffd, total number of exits for %u are: %u", basic_exit_reason, eax);
 		}else {
 			eax = 0x00000000;
 			ebx = 0x00000000;
@@ -1111,7 +1111,7 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 		 	ebx = ((atomic64_read(&exit_time_single[1][basic_exit_reason]) & 0xffffffff) >> 32); 
 		 	ecx = atomic64_read(&exit_time_single[1][basic_exit_reason]) & 0xffffffff;
 			edx = 0x00000000;
-			printk("eax leaf is 0x4ffffffc, total time spent on exit number %u is %llu", basic_exit_reason, atomic64_read(&exit_time_single[1][basic_exit_reason]));
+			printk("eax leaf is 0x4ffffffc, total time spent on exit number %u is: %llu", basic_exit_reason, atomic64_read(&exit_time_single[1][basic_exit_reason]));
 		}
 		else {
 			eax = 0x00000000;
