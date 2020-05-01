@@ -1064,17 +1064,34 @@ uint32_t num_exits_single[2][69] = {
 	};
 EXPORT_SYMBOL(num_exits_single);
 
-atomic64_t exit_time_single[2][69] = {
+/*atomic64_t exit_time_single[2][69] = {
 	{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68},
 	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	};*/
+atomic64_t exit_time_single[2][69] = {
+	{{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}, {19}, {20}, {21}, {22}, {23}, {24}, {25}, {26}, {27}, {28}, {29}, {30}, {31}, {32}, {33}, {34}, {35}, {36}, {37}, {38}, {39}, {40}, {41}, {42}, {43}, {44}, {45}, {46}, {47}, {48}, {49}, {50}, {51}, {52}, {53}, {54}, {55}, {56}, {57}, {58}, {59}, {60}, {61}, {62}, {63}, {64}, {65}, {66}, {67}, {68}},
+	{{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}}
 	};
 EXPORT_SYMBOL(exit_time_single);
+
+//new change
+atomic64_t exit_time_all={0};
+EXPORT_SYMBOL(exit_time_all);
+
+void add_exit_time(uint64_t time_taken, u32 exit_reason) {
+        if (exit_reason < 69) {
+                atomic64_add(time_taken, &exit_time_single[1][exit_reason]);
+                //printk("Inside add_exit_time function!!!");
+        }
+}
+EXPORT_SYMBOL_GPL(add_exit_time);
 
 int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 {
 	u32 eax, ebx, ecx, edx;
 	/* changes for assignment 2 and 3 */
 	uint32_t basic_exit_reason;
+	//num_exits_all=0;
 
 	if (cpuid_fault_enabled(vcpu) && !kvm_require_cpl(vcpu, 0))
 		return 1;
@@ -1087,6 +1104,15 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 	if(eax == 0x4FFFFFFF){
 		printk("eax leaf is 0x4fffffff, total number of exits are: %u", num_exits_all);
 		eax = num_exits_all;
+	}
+	else if (eax == 0x4FFFFFFE) {			//new change
+
+		//exit_time_all high bits ebx, low in ecx
+                //need to convert this into CPU cycles
+                ecx = atomic64_read(&exit_time_all) & 0xffffffff;
+                ebx = (atomic64_read(&exit_time_all) & 0xffffffff) >> 32;
+		printk("eax leaf is 0x4ffffffe, total time spent processing all exits is: %llu" , atomic64_read(&exit_time_all));
+	
 	}
 	else if(eax==0x4FFFFFFD){
 		if(ecx <69){  
@@ -1133,12 +1159,12 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
 	return kvm_skip_emulated_instruction(vcpu);
 }
 
-void add_exit_time(uint64_t time_taken, u32 exit_reason) {
+/*void add_exit_time(uint64_t time_taken, u32 exit_reason) {
 	if (exit_reason < 69) {
 		atomic64_add(time_taken, &exit_time_single[1][exit_reason]);
 		//printk("Inside add_exit_time function!!!");
 	}
-}
+}*/
 
 EXPORT_SYMBOL_GPL(kvm_emulate_cpuid);
-EXPORT_SYMBOL_GPL(add_exit_time);
+//EXPORT_SYMBOL_GPL(add_exit_time);
