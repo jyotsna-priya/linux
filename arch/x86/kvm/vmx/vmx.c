@@ -5905,9 +5905,9 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu,
 		nested_mark_vmcs12_pages_dirty(vcpu);
 
 		if (nested_vmx_exit_reflected(vcpu, exit_reason)) {
-			exit_time = rdtsc() - exit_start_time;
+			/*exit_time = rdtsc() - exit_start_time;
 			add_exit_time(exit_time, exit_reason);
-			atomic64_add(exit_time, &exit_time_all);
+			atomic64_add(exit_time, &exit_time_all);*/
 			return nested_vmx_reflect_vmexit(vcpu, exit_reason);
 		}
 	}
@@ -5918,9 +5918,9 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu,
 		vcpu->run->fail_entry.hardware_entry_failure_reason
 			= exit_reason;
 		/* changes for assignment 2 and 3 */
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return 0;
 	}
 
@@ -5930,9 +5930,9 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu,
 		vcpu->run->fail_entry.hardware_entry_failure_reason
 			= vmcs_read32(VM_INSTRUCTION_ERROR);
 		/* changes for assignment 2 and 3 */
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return 0;
 	}
 
@@ -5960,9 +5960,9 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu,
 				vmcs_read64(GUEST_PHYSICAL_ADDRESS);
 		}
 		/* changes for assignment 2 and 3 */
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return 0;
 	}
 
@@ -5997,49 +5997,49 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu,
 	if (exit_reason == EXIT_REASON_MSR_WRITE) {
 		/* changes for assignment 2 and 3 */
 		//printk("Inside EXIT_REASON_MSR_WRITE");
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return kvm_emulate_wrmsr(vcpu);
 	}
 	else if (exit_reason == EXIT_REASON_PREEMPTION_TIMER) {
 		/* changes for assignment 2 and 3 */
 		//printk("Inside EXIT_REASON_PREEMPTION_TIMER");
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return handle_preemption_timer(vcpu);
 	}		
 	else if (exit_reason == EXIT_REASON_INTERRUPT_WINDOW) {
 		/* changes for assignment 2 and 3 */
 		//printk("Inside EXIT_REASON_INTERRUPT_WINDOW");
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return handle_interrupt_window(vcpu);
 	}		
 	else if (exit_reason == EXIT_REASON_EXTERNAL_INTERRUPT) {
 		/* changes for assignment 2 and 3 */
 		//printk("Inside EXIT_REASON_EXTERNAL_INTERRUPT");
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return handle_external_interrupt(vcpu);
 	}
 	else if (exit_reason == EXIT_REASON_HLT) {
 		/* changes for assignment 2 and 3 */
 		//printk("Inside EXIT_REASON_HLT");
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return kvm_emulate_halt(vcpu);
 	}
 	else if (exit_reason == EXIT_REASON_EPT_MISCONFIG) {
 		/* changes for assignment 2 and 3 */
 		//printk("Inside EXIT_REASON_EPT_MISCONFIG");
-		exit_time = rdtsc() - exit_start_time;
+		/*exit_time = rdtsc() - exit_start_time;
 		add_exit_time(exit_time, exit_reason);
-		atomic64_add(exit_time, &exit_time_all);
+		atomic64_add(exit_time, &exit_time_all);*/
 		return handle_ept_misconfig(vcpu);
 	}
 #endif
@@ -6053,7 +6053,6 @@ static int vmx_handle_exit(struct kvm_vcpu *vcpu,
 	temp_return_val = kvm_vmx_exit_handlers[exit_reason](vcpu);
 	exit_time = rdtsc() - exit_start_time;
 	add_exit_time(exit_time, exit_reason);
-	//change 2
 	atomic64_add(exit_time, &exit_time_all);
 	return temp_return_val;
 	//return kvm_vmx_exit_handlers[exit_reason](vcpu);
